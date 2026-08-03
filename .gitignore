@@ -9,6 +9,7 @@ venv/
 # Data
 backend/data/raw/*.csv
 backend/data/raw/*.parquet
+backend/models/*
 
 # IDE
 .vscode/
