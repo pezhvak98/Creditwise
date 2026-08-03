@@ -2,7 +2,16 @@ import os
 from pathlib import Path
 from typing import Final
 
+# Load environment variables from .env file BEFORE anything else.
+# This must happen before reading any env var below.
+from dotenv import load_dotenv
+
 BACKEND_DIR: Final[Path] = Path(__file__).resolve().parents[2]
+
+# Look for .env in the backend directory.
+_ENV_FILE: Final[Path] = BACKEND_DIR / ".env"
+if _ENV_FILE.exists():
+    load_dotenv(dotenv_path=_ENV_FILE, override=False)
 
 MODEL_PATH: Final[Path] = (
     BACKEND_DIR / "models" / "credit_scoring_pipeline.joblib"
@@ -21,10 +30,16 @@ EXPLANATION_PROVIDER: Final[str] = (
     os.getenv("EXPLANATION_PROVIDER", "local").strip().lower()
 )
 
+# Base URL for any OpenAI-compatible endpoint.
+# Defaults to a local self-hosted LLM for privacy-preserving explanations.
+OPENAI_BASE_URL: Final[str] = (
+    os.getenv("OPENAI_BASE_URL", "http://localhost:20128/v1").strip()
+)
+
 OPENAI_API_KEY: Final[str] = os.getenv("OPENAI_API_KEY", "").strip()
 
 OPENAI_MODEL: Final[str] = (
-    os.getenv("OPENAI_MODEL", "gpt-4o-mini").strip()
+    os.getenv("OPENAI_MODEL", "oc/deepseek-v4-flash-free").strip()
 )
 
 EXPLANATION_LANGUAGE: Final[str] = (
