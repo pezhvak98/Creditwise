@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ApplicationForm } from "./components/ApplicationForm";
+import { ResultDashboard } from "./components/ResultDashboard";
 import { creditApi } from "./api/creditApi";
 import type {
   CreditApplicationRequest,
@@ -10,15 +11,16 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CreditExplanationResponse | null>(null);
+  const [showForm, setShowForm] = useState(true);
 
   const handleSubmit = async (application: CreditApplicationRequest) => {
     setIsLoading(true);
     setError(null);
-    setResult(null);
 
     try {
       const response = await creditApi.explainCredit(application);
       setResult(response);
+      setShowForm(false);
     } catch (err) {
       setError(
         err instanceof Error
@@ -28,6 +30,11 @@ function App() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setResult(null);
+    setShowForm(true);
   };
 
   return (
@@ -65,33 +72,26 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
-        <ApplicationForm onSubmit={handleSubmit} isLoading={isLoading} />
+        {showForm ? (
+          <>
+            <ApplicationForm onSubmit={handleSubmit} isLoading={isLoading} />
 
-        {/* Error Message */}
-        {error && (
-          <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
-            <p className="font-medium">خطا در پردازش درخواست</p>
-            <p className="text-sm mt-1">{error}</p>
-          </div>
-        )}
-
-        {/* Result will be shown here in Phase 5.2 */}
-        {result && (
-          <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-800">
-              ✅ پاسخ با موفقیت دریافت شد.
-            </p>
-            <pre className="mt-2 text-xs text-slate-600 overflow-x-auto" dir="ltr">
-              {JSON.stringify(result, null, 2)}
-            </pre>
-          </div>
+            {error && (
+              <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+                <p className="font-medium">خطا در پردازش درخواست</p>
+                <p className="text-sm mt-1">{error}</p>
+              </div>
+            )}
+          </>
+        ) : (
+          result && <ResultDashboard result={result} onReset={handleReset} />
         )}
       </main>
 
       {/* Footer */}
       <footer className="max-w-6xl mx-auto px-4 py-6 text-center text-sm text-slate-500">
         <p>
-          CreditWise v0.1.0 • Powered by FastAPI + React + Local LLM • Pezhvak
+          Pezhvak • Powered by FastAPI + React + Local LLM
         </p>
       </footer>
     </div>
