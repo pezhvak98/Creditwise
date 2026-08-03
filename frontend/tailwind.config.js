@@ -13,9 +13,10 @@ export default {
         'bank-danger': '#ef4444',
         'bank-warning': '#f59e0b',
       },
-      fontFamily: {
-        'vazir': ['Vazirmatn', 'system-ui', 'sans-serif'],
-      },
+    },
+    fontFamily: {
+      sans: ['Vazirmatn', 'system-ui', 'sans-serif'],
+      vazir: ['Vazirmatn', 'system-ui', 'sans-serif'],
     },
   },
   plugins: [],

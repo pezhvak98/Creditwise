@@ -3,8 +3,21 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    font-family: 'Vazirmatn', system-ui, sans-serif;
+  }
+
   body {
-    @apply bg-slate-50 font-vazir text-slate-800 antialiased;
+    @apply bg-slate-50 text-slate-800 antialiased;
+  }
+
+  /* Apply Vazirmatn to all form elements */
+  input,
+  button,
+  select,
+  textarea,
+  optgroup {
+    font-family: inherit;
   }
 }
 
@@ -21,6 +34,13 @@
            rounded-lg font-medium hover:bg-blue-50 transition-all duration-200;
   }
 
+  .btn-success {
+    @apply px-6 py-3 bg-bank-accent text-white rounded-lg font-medium
+           hover:bg-green-600 transition-all duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed
+           shadow-sm hover:shadow-md;
+  }
+
   .input-field {
     @apply w-full px-4 py-3 border border-slate-300 rounded-lg
            focus:outline-none focus:ring-2 focus:ring-bank-primary focus:border-transparent
@@ -34,8 +54,9 @@
   .label {
     @apply block text-sm font-medium text-slate-700 mb-2;
   }
+}
 
-  @keyframes fade-in {
+@keyframes fade-in {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -48,5 +69,4 @@
 
 .animate-fade-in {
   animation: fade-in 0.5s ease-out;
-}
 }

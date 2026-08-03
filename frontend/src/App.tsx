@@ -11,15 +11,17 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CreditExplanationResponse | null>(null);
+  const [application, setApplication] = useState<CreditApplicationRequest | null>(null);
   const [showForm, setShowForm] = useState(true);
 
-  const handleSubmit = async (application: CreditApplicationRequest) => {
+  const handleSubmit = async (appData: CreditApplicationRequest) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await creditApi.explainCredit(application);
+      const response = await creditApi.explainCredit(appData);
       setResult(response);
+      setApplication(appData);
       setShowForm(false);
     } catch (err) {
       setError(
@@ -34,6 +36,7 @@ function App() {
 
   const handleReset = () => {
     setResult(null);
+    setApplication(null);
     setShowForm(true);
   };
 
@@ -84,7 +87,14 @@ function App() {
             )}
           </>
         ) : (
-          result && <ResultDashboard result={result} onReset={handleReset} />
+          result &&
+          application && (
+            <ResultDashboard
+              result={result}
+              application={application}
+              onReset={handleReset}
+            />
+          )
         )}
       </main>
 
